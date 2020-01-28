@@ -1,0 +1,183 @@
+AMPLAPI changelog
+=================
+
+Here "[Breaking]" means the change that may break valid user code,
+"[Fix]" - a bug fix.
+
+2.0.1
+* [New] Wrap instances in the Java API.
+* [New] AMPL::exportData now supports indexed sets.
+
+2.0.0
+* [Breaking] Evaluating incomplete statements throws std::invalid_argument when _allow_incomplete_stmts is false
+* [Breaking] The Java API uses now the native C++ API, so deployment is now platform dependent and some functionalities have been changed
+* [New] AMPL::exportData to get all the data defined in the current instance in dat format
+* [New] AMPL::exportModel to get all the entities currently defined (in model format)
+* [New] Boolean option "_print_debug_information" to direct to the output handler every interaction the API has with AMPL
+* [New] Boolean option "_print_prompts" to enable the redirection (normally suppressed) of the AMPL prompts to the output handler
+* [New] Set of options "_log_file_name", "_log_input_only" and "_log" to log the interactions with AMPL to a file
+* [New] Option "_allow_incomplete_stmts" enables/disables support for not terminated statements
+
+1.4.1
+* [Fixed] Precision issues with parameters
+* [Fixed] AMPL::setData when assigning values only to a set
+* [New] Implemented deep equality operator for DataFrame
+* [Fixed] Issue with DataFrame constructor from Entity
+* [Breaking] Now DataFrame::addRow throws an exception when adding
+	a row with an existing index
+
+1.4.0 - 2017-10-13
+
+* [New] First public beta of the C# API
+* [Fix] Fix exception thrown in AMPL Java API when using getData
+* [Fix] Using the C++ API from a windows application should not create a flashing console window anymore
+
+1.3.2 - 2017-08-07
+
+* [Fix] Cluttering messages due to `times` and `gentimes` options set to one throw now an informative exception
+* [Fix] Fix exception thrown in AMPL Java API when using getData
+
+1.3.1 - 2017-06-15
+
+* [Fix] Out of the box build of cpp examples on Visual Studio fixed
+
+1.3 - 2017-03-19
+
+* [Temp] Asynchronous functionalities are momentarily deprecated as we debug issues in stopping solvers
+* [Fix] Improved reliability of interrupt functionality
+* Removed the necessity of AMPLSIG.DLL to enable async  functionality in Windows
+* [New] Added support for ``Set.getValues`` and ``SetInstance.getValues`` in Java
+* Added shutdown hood in Java, now the library terminates the interpreter even when the program is ended badly
+* [Fix] Fixed problem with constraints giving the warning  message ```option abs_boundtol or option rel_boundtol will change deduced dual values.```.
+* [Fix] Fixed problem with options 'times' and 'gentimes', where the API was crashing due to unexpected messages
+* The API now treats the `error_presolve` messages as warnings
+* [Fix] Fixed a bug in accessing multidimensional entities with ``ampl.getData ``
+* [Breaking] C++: Renamed MemberList and InstanceList to MemberRange and InstanceRange respectively
+* [Breaking] C++: ``Parameter::setValues`` throws an exception if the number of arguments passed is not equal to the number of instances in the Parameter.
+* [Fix] C++: Fixed detection of compiler support for ``explicit`` under VS2012
+
+1.2.3 - 2016-05-19
+
+* Improved compatibility with older systems
+
+1.2.2 - 2016-02-25
+
+* Improved "Getting started" documentation
+* Added an optional solver argument to examples
+* Fixed issues with examples
+
+1.2.1 - 2016-02-10
+
+* Added CMake build script for C++ examples
+* Fixed ampl search paths
+
+1.2 - 2016-02-05
+
+* First public beta of the C++ API
+* Matlab setup script is now enclosed in a function, to enhance compatibility
+  with parallel for loops
+
+1.1 - 2015-11-25
+
+* [Breaking] ``Entity.indexarity()`` now returns 0 for scalar entities.
+* ``Entity.hasIndexing()`` is now marked as deprecated, will be removed in
+  future versions.
+* ``Environment.addToPath()`` is deprecated.
+* [New] Added ``Entity.isScalar()``.
+* [New] Added ``Objective.sstatus()`` and ``ObjectiveInstance.sstatus()``.
+* [New] Added output kinds ``AMPLOutput.SHELL_MESSAGE``,
+  ``AMPLOutput.SHELL_OUTPUT`` and ``AMPLOutput.WRITE_TABLE``.
+* [Fix] Added support for ``write_table`` AMPL message
+* [Fix] Fixed support for string elements containing spaces in
+  ``AMPL.setData()``.
+* [Fix] Fixed support for entities indexed over empty sets.
+
+1.0 - 2015-05-30
+
+* [Fix] Fixed a bug which was causing AMPL executable to not to be found if
+  placed in directories containing spaces in their names in JVM version < 1.7.
+* [Fix] Matlab AMPL constructor was quitely ignoring arguments. Now the
+  argument can be a string pointing to the directory of the AMPL executable.
+* [Breaking] ``AMPLException.toString()`` now uses platform independent
+  newlines (``\n``)
+* [Fix] ``AMPL.getData()`` now works correctly for compound sets
+* [Fix] ``AMPL.getEntity()`` now returns ``null`` for tables.
+* [Fix] Now setting the ``PATH`` in the environment class prior to construction
+  of the AMPL object is correcly considered.
+
+0.2.4 - 2015-02-04
+
+* [Fix] ``Entity.getValues()`` incorrect handling of entities indexed over sets
+  of ``indexarity > 1``.
+* Improved performance post issuing of ``AMPL.eval`` command, as only the
+  needed entities are updated.
+* [Breaking] All ``Table.get`` overloads, ``Table.entrySet``,
+  ``Table.getIndices``, ``Table.getValues`` and ``Table.getInstances`` throw
+  ``UnsupportedOperationException`` instead of returning ``null``.
+* [Breaking] ``Table.getIndexingSets`` and ``Table.getDeclaration`` throw
+  ``UnsupportedOperationException`` if the version of the underlying AMPL
+  interpreter is < 20150127.
+* Improved error reporting in case of crash of the underlying interpreter.
+  The last issue command is now reported.
+* [Breaking] ``AMPL.toString`` now reports the API version together with the
+  AMPL interpreter version.
+
+0.2.2 - 2014-10-09
+
+* [Breaking] ``AMPL.setData`` now has two overloads, ``setData(DataFrame)``
+  and ``setData(DataFrame, String)``. These replace the method
+  ``setData(DataFrame, bool)``.
+  The code
+
+  .. code:: java
+
+    ampl.setData(dataFrame, false);
+
+  should be replaced with
+
+  .. code:: java
+
+    ampl.setData(dataFrame);
+
+  in the new version. Similarly, the code
+
+  .. code:: java
+
+    ampl.setData(dataFrame, true);
+
+  should be replaced with
+
+  .. code:: java
+
+    ampl.setData(dataFrame, setName);
+
+  where ``setName`` is the name of a set to receive the data from the key
+  columns of the data frame. This allows providing data for multidimensional
+  sets.
+
+* [Breaking] ``Entity.getIndexingSets`` now returns an empty array instead of
+  ``null`` for scalar parameters.
+
+* AMPL class can now be used in the try-with-resources statement:
+
+  .. code:: java
+
+    try (AMPL ampl = new AMPL()) {
+      // use ampl
+    }
+
+* Performance improvements in ``DataFrame.setMatrix``, ``Variable.fix`` and
+  other methods
+* Improved error reporting from ``Set.setValues``
+* [Fix] ``ampl.display`` does not show an error if called on a non existent
+  entity
+* [Fix] ``AMPL.setData`` silently ignores data for scalar parameter
+* [Fix] Incorrect processing of indexed sets in indexing
+* [Fix] ``Entity.getValues()`` throws a ``NumberFormatException`` when indexing
+  set is empty
+* [Fix] ``Objective.value()`` returns the old value after changing variable
+  used in objective
+
+0.1.0 - 2014-05-09
+
+* Initial release
